@@ -1,0 +1,24 @@
+<mat-card>
+    <mat-card-header>
+        <mat-card-title>Cursos</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+        @if (courses$ | async; as courses) {
+            <app-courses-list
+                [courses]="courses"
+            ></app-courses-list>
+        } @else {
+            <div class="loading-container">
+                <mat-spinner></mat-spinner>
+            </div>
+        }
+    </mat-card-content>
+
+    <mat-card-actions align="end">
+        <button mat-raised-button color="primary" routerLink="/cursos/novo">
+            <mat-icon>add</mat-icon>
+            Novo Curso
+        </button>
+    </mat-card-actions>
+</mat-card>

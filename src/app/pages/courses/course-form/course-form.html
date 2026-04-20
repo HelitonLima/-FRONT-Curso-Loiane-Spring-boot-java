@@ -1,0 +1,49 @@
+<mat-card>
+    <mat-card-header>
+        <mat-card-title>{{ title }}</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+        <form [formGroup]="form" (ngSubmit)="onSubmit()" class="course-form">
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Nome</mat-label>
+                <input matInput formControlName="name" placeholder="Nome do curso" />
+                @if (form.controls.name.hasError('required') && form.controls.name.touched) {
+                    <mat-error>Nome é obrigatório.</mat-error>
+                }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Categoria</mat-label>
+                <mat-select formControlName="category" placeholder="Selecione a categoria">
+                    <mat-option value="FRONT-END">Front-end</mat-option>
+                    <mat-option value="BACK-END">Back-end</mat-option>
+                </mat-select>
+                @if (form.controls.category.hasError('required') && form.controls.category.touched) {
+                    <mat-error>Categoria é obrigatória.</mat-error>
+                }
+            </mat-form-field>
+        </form>
+    </mat-card-content>
+
+    <mat-card-actions align="end">
+        <button matButton type="button" (click)="onCancel()">
+            <mat-icon>arrow_back</mat-icon>
+            Voltar
+        </button>
+
+        @if (mode !== 'view') {
+            <button matButton="filled" type="submit" (click)="onSubmit()"
+                [disabled]="form.invalid || loading">
+                @if (loading) {
+                    <mat-progress-spinner diameter="20" mode="indeterminate"></mat-progress-spinner>
+                } @else {
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <mat-icon style="font-size: 18px; width: 18px; height: 18px;">save</mat-icon>
+                        <span>Salvar</span>
+                    </div>
+                }
+            </button>
+        }
+    </mat-card-actions>
+</mat-card>

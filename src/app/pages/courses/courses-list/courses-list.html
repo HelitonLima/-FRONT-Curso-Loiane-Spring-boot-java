@@ -1,0 +1,35 @@
+<mat-table [dataSource]="courses" class="mat-elevation-z2 cursos-table">
+    <ng-container matColumnDef="id">
+        <mat-header-cell *matHeaderCellDef>#</mat-header-cell>
+        <mat-cell *matCellDef="let curso">{{ curso.id }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="name">
+        <mat-header-cell *matHeaderCellDef>Nome</mat-header-cell>
+        <mat-cell *matCellDef="let curso">{{ curso.name }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="category">
+        <mat-header-cell *matHeaderCellDef>Categoria</mat-header-cell>
+        <mat-cell *matCellDef="let curso">
+            <mat-chip-set>
+                <mat-chip [highlighted]="true">{{ curso.category }}</mat-chip>
+            </mat-chip-set>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+        <mat-header-cell *matHeaderCellDef>Ações</mat-header-cell>
+        <mat-cell *matCellDef="let curso">
+            <button mat-icon-button color="primary" aria-label="Editar">
+                <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button color="warn" aria-label="Excluir">
+                <mat-icon>delete</mat-icon>
+            </button>
+        </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+</mat-table>
