@@ -21,10 +21,10 @@
     <ng-container matColumnDef="actions">
         <mat-header-cell *matHeaderCellDef>Ações</mat-header-cell>
         <mat-cell *matCellDef="let curso">
-            <button mat-icon-button color="primary" aria-label="Editar">
+            <button mat-icon-button color="primary" aria-label="Editar" (click)="editEvent.emit(curso.id)">
                 <mat-icon>edit</mat-icon>
             </button>
-            <button mat-icon-button color="warn" aria-label="Excluir">
+            <button mat-icon-button color="warn" aria-label="Excluir" (click)="deleteEvent.emit(curso.id)">
                 <mat-icon>delete</mat-icon>
             </button>
         </mat-cell>

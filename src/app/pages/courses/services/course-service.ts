@@ -33,4 +33,11 @@ export class CourseService {
       first()
     );
   }
+
+  getById(id: number) {
+    return this.http.get<ICourse>(`${this.API}/${id}`)
+    .pipe(
+      first()
+    );
+  }
 }

@@ -1,11 +1,10 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
-import { ICourse } from '../../../models/course.model';
+import { ICourse } from '../models/course.model';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
-import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-courses-list',
@@ -21,6 +20,9 @@ import { RouterLink } from '@angular/router';
 })
 export class CoursesList {
   @Input() courses!: ICourse[];
+
+  @Output() editEvent = new EventEmitter<number>();
+  @Output() deleteEvent = new EventEmitter<number>();
   
   protected readonly displayedColumns = ['id', 'name', 'category', 'actions'];
 }

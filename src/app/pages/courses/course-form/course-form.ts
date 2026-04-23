@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -7,9 +7,9 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CourseService } from '../../../services/course-service';
+import { CourseService } from '../services/course-service';
 import { Location } from '@angular/common';
-import { ICourse } from '../../../models/course.model';
+import { ICourse } from '../models/course.model';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -29,7 +29,7 @@ import { HttpErrorResponse } from '@angular/common/http';
   templateUrl: './course-form.html',
   styleUrl: './course-form.scss',
 })
-export class CourseForm {
+export class CourseForm implements OnInit {
   form = new FormGroup({
     id: new FormControl<number | null>(null),
     name: new FormControl('', [Validators.required, Validators.maxLength(200)]),
@@ -39,6 +39,7 @@ export class CourseForm {
   mode: string = 'new';
   title: string = 'Novo Curso';
   loading: boolean = false;
+  id?: number;
 
   constructor(
     private route: ActivatedRoute,
@@ -48,12 +49,18 @@ export class CourseForm {
   ) {
     this.mode = this.route.snapshot.data['mode'] || 'new';
 
+    this.id = this.route.snapshot.params['id'];
+
     if (this.mode === 'edit') {
       this.title = 'Editar Curso';
     } else if (this.mode === 'view') {
       this.title = 'Visualizar Curso';
       this.form.disable();
     }
+  }
+
+  ngOnInit(): void {
+    this.getCourseById();
   }
 
   onSubmit() {
@@ -90,5 +97,19 @@ export class CourseForm {
     this.loading = false;
     this._snackbar.open('Erro ao salvar curso', 'Fechar');
     console.error('Erro ao salvar curso:', error);
+  }
+
+  getCourseById() {
+    if (this.id) {
+      this.service.getById(this.id).subscribe({
+        next: (course) => {
+          this.form.patchValue(course);
+        },
+        error: (error) => {
+          this._snackbar.open('Erro ao carregar curso', 'Fechar');
+          console.error('Erro ao carregar curso:', error);
+        }
+      });
+    }
   }
 }

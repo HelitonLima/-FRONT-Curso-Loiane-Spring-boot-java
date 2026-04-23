@@ -7,6 +7,8 @@
         @if (courses$ | async; as courses) {
             <app-courses-list
                 [courses]="courses"
+                (editEvent)="onEdit($event)"
+                (deleteEvent)="onDelete($event)"
             ></app-courses-list>
         } @else {
             <div class="loading-container">
