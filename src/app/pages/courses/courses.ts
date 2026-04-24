@@ -11,6 +11,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { CoursesList } from './courses-list/courses-list';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-courses',
@@ -29,12 +30,17 @@ import { CoursesList } from './courses-list/courses-list';
   styleUrl: './courses.scss',
 })
 export class Courses {
-  protected readonly courses$: Observable<ICourse[]>;
+  protected courses$: Observable<ICourse[]> | null = null;
 
   constructor(
     private courseService: CourseService,
-    private router: Router
+    private router: Router,
+    private _snackbar: MatSnackBar
   ) {
+    this.refresh();
+  }
+
+  refresh() {
     this.courses$ = this.courseService.list();
   }
 
@@ -43,6 +49,15 @@ export class Courses {
   }
 
   onDelete(id: number) {
-    // this.courseService.delete(id);
+    this.courseService.delete(id).subscribe({
+      next: () => {
+        this._snackbar.open('Curso removido com sucesso', 'Fechar', {verticalPosition: 'top'});
+        this.refresh();
+      },
+      error: (error) => {
+        this._snackbar.open('Erro ao remover curso', 'Fechar', {verticalPosition: 'top'});
+        console.error('Erro ao remover curso:', error);
+      }
+    });
   }
 }

@@ -21,17 +21,11 @@ export class CourseService {
   }
 
   save(record: ICourse) {
-    return this.http.post<ICourse>(this.API, record)
-    .pipe(
-      first()
-    );
+    return this.http.post<ICourse>(this.API, record);
   }
   
   update(record: ICourse) {
-    return this.http.put<ICourse>(`${this.API}/${record.id}`, record)
-    .pipe(
-      first()
-    );
+    return this.http.put<ICourse>(`${this.API}/${record.id}`, record);
   }
 
   getById(id: number) {
@@ -39,5 +33,9 @@ export class CourseService {
     .pipe(
       first()
     );
+  }
+
+  delete(id: number) {
+    return this.http.delete(`${this.API}/${id}`);
   }
 }
