@@ -7,9 +7,10 @@
         <form [formGroup]="form" (ngSubmit)="onSubmit()" class="course-form">
             <mat-form-field appearance="outline" class="full-width">
                 <mat-label>Nome</mat-label>
-                <input matInput formControlName="name" placeholder="Nome do curso" />
-                @if (form.controls.name.hasError('required') && form.controls.name.touched) {
-                    <mat-error>Nome é obrigatório.</mat-error>
+                <input matInput formControlName="name" placeholder="Nome do curso" #nameInput />
+                <mat-hint align="end">{{nameInput.value?.length || 0}}/200</mat-hint>
+                @if (form.controls.name.invalid) {
+                    <mat-error>{{ getErrorMessage('name') }}</mat-error>
                 }
             </mat-form-field>
 
@@ -19,8 +20,8 @@
                     <mat-option value="FRONT-END">Front-end</mat-option>
                     <mat-option value="BACK-END">Back-end</mat-option>
                 </mat-select>
-                @if (form.controls.category.hasError('required') && form.controls.category.touched) {
-                    <mat-error>Categoria é obrigatória.</mat-error>
+                @if (form.controls.category.invalid) {
+                    <mat-error>{{ getErrorMessage('category') }}</mat-error>
                 }
             </mat-form-field>
         </form>

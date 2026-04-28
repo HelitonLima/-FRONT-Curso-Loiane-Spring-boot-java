@@ -32,7 +32,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 export class CourseForm implements OnInit {
   form = new FormGroup({
     id: new FormControl<number | null>(null),
-    name: new FormControl('', [Validators.required, Validators.maxLength(200)]),
+    name: new FormControl('', [Validators.required, Validators.maxLength(200), Validators.minLength(5)]),
     category: new FormControl('', [Validators.required]),
   });
 
@@ -111,5 +111,21 @@ export class CourseForm implements OnInit {
         }
       });
     }
+  }
+
+  getErrorMessage(controlName: string): string {
+    const control = this.form.get(controlName);
+    if (control?.hasError('required') && control?.touched) {
+      return 'Este campo é obrigatório.';
+    }
+    if (control?.hasError('maxlength') && control?.touched) {
+      const requiredLength = control.errors?.['maxlength']?.requiredLength;
+      return `Este campo deve ter no máximo ${requiredLength} caracteres.`;
+    }
+    if (control?.hasError('minlength') && control?.touched) {
+      const requiredLength = control.errors?.['minlength']?.requiredLength;
+      return `Este campo deve ter no mínimo ${requiredLength} caracteres.`;
+    }
+    return 'Erro ao validar campo';
   }
 }
