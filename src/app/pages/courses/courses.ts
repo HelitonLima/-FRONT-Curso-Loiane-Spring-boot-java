@@ -12,6 +12,8 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { CoursesList } from './courses-list/courses-list';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmationDialog } from '../../shared/components/confirmation-dialog/confirmation-dialog';
 
 @Component({
   selector: 'app-courses',
@@ -35,7 +37,8 @@ export class Courses {
   constructor(
     private courseService: CourseService,
     private router: Router,
-    private _snackbar: MatSnackBar
+    private _snackbar: MatSnackBar,
+    private dialog: MatDialog
   ) {
     this.refresh();
   }
@@ -49,6 +52,18 @@ export class Courses {
   }
 
   onDelete(id: number) {
+    const dialogRef = this.dialog.open(ConfirmationDialog, {
+      data: 'Tem certeza que deseja remover este curso?'
+    });
+
+    dialogRef.afterClosed().subscribe((result: boolean) => {
+      if (result) {
+        this.onDeleteAction(id);
+      }
+    });
+  }
+
+  onDeleteAction(id: number) {
     this.courseService.delete(id).subscribe({
       next: () => {
         this._snackbar.open('Curso removido com sucesso', 'Fechar', {verticalPosition: 'top'});
