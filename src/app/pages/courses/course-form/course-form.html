@@ -24,6 +24,32 @@
                     <mat-error>{{ getErrorMessage('category') }}</mat-error>
                 }
             </mat-form-field>
+            
+            <div class="lessons-container">
+                <div class="lessons-header">
+                    <h2>Aulas</h2>
+            
+                    <button mat-icon-button type="button">
+                        <mat-icon aria-label="Adicionar aula">add</mat-icon>
+                    </button>
+                </div>
+
+                <div class="lessons-list">
+                    @for(lesson of lessons.controls; track lesson; let i = $index) {
+                        <div class="lesson-row" [formGroup]="lesson">
+                            <mat-form-field appearance="outline" [ngStyle]="{width: '60%'}">
+                                <mat-label>Nome da Aula</mat-label>
+                                <input matInput formControlName="name" placeholder="Nome da aula" />
+                            </mat-form-field>
+                            <mat-form-field appearance="outline" [ngStyle]="{width: '40%'}">
+                                <mat-label>URL</mat-label>
+                                <input matInput formControlName="youtubeUrl" placeholder="URL da aula" />
+                            </mat-form-field>
+                        </div>
+                    }
+                </div>
+            </div>
+
         </form>
     </mat-card-content>
 
@@ -35,7 +61,7 @@
 
         @if (mode !== 'view') {
             <button matButton="filled" type="submit" (click)="onSubmit()"
-                [disabled]="form.invalid || loading">
+                [disabled]="form.invalid || loading" aria-label="Salvar curso">
                 @if (loading) {
                     <mat-progress-spinner diameter="20" mode="indeterminate"></mat-progress-spinner>
                 } @else {

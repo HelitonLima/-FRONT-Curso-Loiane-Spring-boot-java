@@ -8,12 +8,13 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CourseService } from '../services/course-service';
-import { Location } from '@angular/common';
+import { Location, NgStyle } from '@angular/common';
 import { ICourse } from '../models/course.model';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ILesson } from '../models/lesson.model';
+import { MatToolbarModule } from '@angular/material/toolbar';
 
 @Component({
   selector: 'app-course-form',
@@ -26,7 +27,9 @@ import { ILesson } from '../models/lesson.model';
     MatButtonModule,
     MatIconModule,
     MatProgressSpinnerModule,
-  ],
+    MatToolbarModule,
+    NgStyle
+],
   templateUrl: './course-form.html',
   styleUrl: './course-form.scss',
 })
