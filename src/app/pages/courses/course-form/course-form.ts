@@ -154,4 +154,8 @@ export class CourseForm implements OnInit {
     
     this.lessons.push(form);
   }
+
+  removeLesson(index: number) {
+    this.lessons.removeAt(index);
+  }
 }
