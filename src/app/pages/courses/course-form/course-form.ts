@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormArray, FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -13,6 +13,7 @@ import { ICourse } from '../models/course.model';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { HttpErrorResponse } from '@angular/common/http';
+import { ILesson } from '../models/lesson.model';
 
 @Component({
   selector: 'app-course-form',
@@ -34,12 +35,17 @@ export class CourseForm implements OnInit {
     id: new FormControl<number | null>(null),
     name: new FormControl('', [Validators.required, Validators.maxLength(200), Validators.minLength(5)]),
     category: new FormControl('', [Validators.required]),
+    lessons: new FormArray<FormGroup>([])
   });
 
   mode: string = 'new';
   title: string = 'Novo Curso';
   loading: boolean = false;
   id?: number;
+
+  get lessons() {
+    return this.form.controls['lessons'];
+  }
 
   constructor(
     private route: ActivatedRoute,
@@ -105,12 +111,18 @@ export class CourseForm implements OnInit {
       this.service.getById(this.id).subscribe({
         next: (course) => {
           this.form.patchValue(course);
+
+          course.lessons.forEach(lesson => {
+            this.addLesson(lesson);
+          });
         },
         error: (error) => {
           this._snackbar.open('Erro ao carregar curso', 'Fechar');
           console.error('Erro ao carregar curso:', error);
         }
       });
+    } else {
+      this.addLesson();
     }
   }
 
@@ -128,5 +140,15 @@ export class CourseForm implements OnInit {
       return `Este campo deve ter no mínimo ${requiredLength} caracteres.`;
     }
     return 'Erro ao validar campo';
+  }
+
+  addLesson(lesson: ILesson = { id: null, name: '', youtubeUrl: '' }) {
+    const form = new FormGroup({
+      id: new FormControl(lesson.id),
+      name: new FormControl(lesson.name, [Validators.required]),
+      youtubeUrl: new FormControl(lesson.youtubeUrl, [Validators.required]),
+    });
+    
+    this.lessons.push(form);
   }
 }
