@@ -38,7 +38,7 @@ export class CourseForm implements OnInit {
     id: new FormControl<number | null>(null),
     name: new FormControl('', [Validators.required, Validators.maxLength(200), Validators.minLength(5)]),
     category: new FormControl('', [Validators.required]),
-    lessons: new FormArray<FormGroup>([])
+    lessons: new FormArray<FormGroup>([], [Validators.required])
   });
 
   mode: string = 'new';
@@ -73,22 +73,25 @@ export class CourseForm implements OnInit {
   }
 
   onSubmit() {
-    if (this.form.valid) {
-      const model: ICourse = {
-        id: this.form.value.id!,
-        name: this.form.value.name!,
-        category: this.form.value.category!,
-        lessons: [],
-      };
-
-      const prop = this.mode === 'edit' ? 'update' : 'save';
-      
-      this.loading = true;
-      this.service[prop](model).subscribe({
-        next: () => this.onSuccess(),
-        error: (error) => this.onError(error)
-      });
+    if (!this.form.valid) {
+      this.form.markAllAsTouched();
+      return;
     }
+
+    const model: ICourse = {
+      id: this.form.value.id!,
+      name: this.form.value.name!,
+      category: this.form.value.category!,
+      lessons: [],
+    };
+
+    const prop = this.mode === 'edit' ? 'update' : 'save';
+    
+    this.loading = true;
+    this.service[prop](model).subscribe({
+      next: () => this.onSuccess(),
+      error: (error) => this.onError(error)
+    });
   }
 
   onCancel() {
@@ -131,6 +134,7 @@ export class CourseForm implements OnInit {
 
   getErrorMessage(controlName: string): string {
     const control = this.form.get(controlName);
+
     if (control?.hasError('required') && control?.touched) {
       return 'Este campo é obrigatório.';
     }
@@ -148,8 +152,8 @@ export class CourseForm implements OnInit {
   addLesson(lesson: ILesson = { id: null, name: '', youtubeUrl: '' }) {
     const form = new FormGroup({
       id: new FormControl(lesson.id),
-      name: new FormControl(lesson.name, [Validators.required]),
-      youtubeUrl: new FormControl(lesson.youtubeUrl, [Validators.required]),
+      name: new FormControl(lesson.name, [Validators.required, Validators.minLength(5), Validators.maxLength(200)]),
+      youtubeUrl: new FormControl(lesson.youtubeUrl, [Validators.required, Validators.minLength(10), Validators.maxLength(11)]),
     });
     
     this.lessons.push(form);
@@ -157,5 +161,9 @@ export class CourseForm implements OnInit {
 
   removeLesson(index: number) {
     this.lessons.removeAt(index);
+  }
+
+  isFormArrayRequired() {
+    return !this.lessons.valid && this.lessons.hasError('required') && this.lessons.touched;
   }
 }

@@ -34,17 +34,28 @@
                     </button>
                 </div>
 
+                @if (isFormArrayRequired()) {
+                    <mat-error>Adicione pelo menos uma aula</mat-error>
+                }
+
                 <div class="lessons-list">
                     @for(lesson of lessons.controls; track lesson; let i = $index) {
                         <div class="lesson-row" [formGroup]="lesson">
                             <mat-form-field appearance="outline" [ngStyle]="{width: '60%'}">
                                 <mat-label>Nome da Aula</mat-label>
                                 <input matInput formControlName="name" placeholder="Nome da aula" />
+                                @if (lesson.controls['name'].invalid) {
+                                    <mat-error> Campo inválido </mat-error>
+                                }
                             </mat-form-field>
 
                             <mat-form-field appearance="outline" [ngStyle]="{width: '40%'}">
+                                <span matPrefix>https://youtu.be/</span>
                                 <mat-label>URL</mat-label>
                                 <input matInput formControlName="youtubeUrl" placeholder="URL da aula" />
+                                @if (lesson.controls['youtubeUrl'].invalid) {
+                                    <mat-error> Campo inválido </mat-error>
+                                }
                             </mat-form-field>
 
                             <button mat-icon-button type="button" (click)="removeLesson(i)" style="margin-bottom: 20px;" color="warn">
@@ -66,7 +77,7 @@
 
         @if (mode !== 'view') {
             <button matButton="filled" type="submit" (click)="onSubmit()"
-                [disabled]="form.invalid || loading" aria-label="Salvar curso">
+                [disabled]="loading" aria-label="Salvar curso">
                 @if (loading) {
                     <mat-progress-spinner diameter="20" mode="indeterminate"></mat-progress-spinner>
                 } @else {
