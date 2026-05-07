@@ -45,7 +45,7 @@
                                 <mat-label>Nome da Aula</mat-label>
                                 <input matInput formControlName="name" placeholder="Nome da aula" />
                                 @if (lesson.controls['name'].invalid) {
-                                    <mat-error> Campo inválido </mat-error>
+                                    <mat-error> {{getErrorMessageFromControl(lesson.controls['name'])}} </mat-error>
                                 }
                             </mat-form-field>
 
@@ -54,7 +54,7 @@
                                 <mat-label>URL</mat-label>
                                 <input matInput formControlName="youtubeUrl" placeholder="URL da aula" />
                                 @if (lesson.controls['youtubeUrl'].invalid) {
-                                    <mat-error> Campo inválido </mat-error>
+                                    <mat-error> {{getErrorMessageFromControl(lesson.controls['youtubeUrl'])}} </mat-error>
                                 }
                             </mat-form-field>
 

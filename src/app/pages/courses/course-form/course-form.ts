@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -15,6 +15,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ILesson } from '../models/lesson.model';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { FormUtils } from '../../../shared/services/form-utils';
 
 @Component({
   selector: 'app-course-form',
@@ -54,7 +55,8 @@ export class CourseForm implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private service: CourseService,
-    private _snackbar: MatSnackBar
+    private _snackbar: MatSnackBar,
+    private formUtils: FormUtils
   ) {
     this.mode = this.route.snapshot.data['mode'] || 'new';
 
@@ -133,20 +135,11 @@ export class CourseForm implements OnInit {
   }
 
   getErrorMessage(controlName: string): string {
-    const control = this.form.get(controlName);
+    return this.formUtils.getErrorMessage(this.form, controlName);
+  }
 
-    if (control?.hasError('required') && control?.touched) {
-      return 'Este campo é obrigatório.';
-    }
-    if (control?.hasError('maxlength') && control?.touched) {
-      const requiredLength = control.errors?.['maxlength']?.requiredLength;
-      return `Este campo deve ter no máximo ${requiredLength} caracteres.`;
-    }
-    if (control?.hasError('minlength') && control?.touched) {
-      const requiredLength = control.errors?.['minlength']?.requiredLength;
-      return `Este campo deve ter no mínimo ${requiredLength} caracteres.`;
-    }
-    return 'Erro ao validar campo';
+  getErrorMessageFromControl(control: AbstractControl) {
+    return this.formUtils.getErrorMessageFromControl(control);
   }
 
   addLesson(lesson: ILesson = { id: null, name: '', youtubeUrl: '' }) {
