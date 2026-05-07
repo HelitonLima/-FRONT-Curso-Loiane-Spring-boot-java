@@ -84,7 +84,7 @@ export class CourseForm implements OnInit {
       id: this.form.value.id!,
       name: this.form.value.name!,
       category: this.form.value.category!,
-      lessons: [],
+      lessons: this.lessons.value,
     };
 
     const prop = this.mode === 'edit' ? 'update' : 'save';
