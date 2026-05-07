@@ -10,7 +10,7 @@
                 <input matInput formControlName="name" placeholder="Nome do curso" #nameInput />
                 <mat-hint align="end">{{nameInput.value.length || 0}}/200</mat-hint>
                 @if (form.controls.name.invalid) {
-                    <mat-error>{{ getErrorMessage('name') }}</mat-error>
+                    <mat-error>{{ formUtils.getErrorMessage(form, 'name') }}</mat-error>
                 }
             </mat-form-field>
 
@@ -21,7 +21,7 @@
                     <mat-option value="Back-end">Back-end</mat-option>
                 </mat-select>
                 @if (form.controls.category.invalid) {
-                    <mat-error>{{ getErrorMessage('category') }}</mat-error>
+                    <mat-error>{{ formUtils.getErrorMessage(form, 'category') }}</mat-error>
                 }
             </mat-form-field>
             
@@ -45,7 +45,9 @@
                                 <mat-label>Nome da Aula</mat-label>
                                 <input matInput formControlName="name" placeholder="Nome da aula" />
                                 @if (lesson.controls['name'].invalid) {
-                                    <mat-error> {{getErrorMessageFromControl(lesson.controls['name'])}} </mat-error>
+                                    <mat-error> 
+                                        {{formUtils.getErrorMessageFromControl(lesson.controls['name'])}} 
+                                    </mat-error>
                                 }
                             </mat-form-field>
 
@@ -54,7 +56,9 @@
                                 <mat-label>URL</mat-label>
                                 <input matInput formControlName="youtubeUrl" placeholder="URL da aula" />
                                 @if (lesson.controls['youtubeUrl'].invalid) {
-                                    <mat-error> {{getErrorMessageFromControl(lesson.controls['youtubeUrl'])}} </mat-error>
+                                    <mat-error> 
+                                        {{formUtils.getErrorMessageFromControl(lesson.controls['youtubeUrl'])}} 
+                                    </mat-error>
                                 }
                             </mat-form-field>
 

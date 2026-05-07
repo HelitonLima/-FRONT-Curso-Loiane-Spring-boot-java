@@ -56,7 +56,7 @@ export class CourseForm implements OnInit {
     private router: Router,
     private service: CourseService,
     private _snackbar: MatSnackBar,
-    private formUtils: FormUtils
+    public formUtils: FormUtils
   ) {
     this.mode = this.route.snapshot.data['mode'] || 'new';
 
@@ -132,14 +132,6 @@ export class CourseForm implements OnInit {
     } else {
       this.addLesson();
     }
-  }
-
-  getErrorMessage(controlName: string): string {
-    return this.formUtils.getErrorMessage(this.form, controlName);
-  }
-
-  getErrorMessageFromControl(control: AbstractControl) {
-    return this.formUtils.getErrorMessageFromControl(control);
   }
 
   addLesson(lesson: ILesson = { id: null, name: '', youtubeUrl: '' }) {
