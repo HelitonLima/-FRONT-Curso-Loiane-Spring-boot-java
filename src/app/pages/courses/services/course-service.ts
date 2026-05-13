@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ICourse } from '../models/course.model';
 import { delay, first } from 'rxjs';
+import { ICoursePage } from '../models/course-page.model';
 
 @Injectable({
   providedIn: 'root',
@@ -13,8 +14,8 @@ export class CourseService {
     private http: HttpClient
   ) { }
   
-  list() {
-    return this.http.get<ICourse[]>(this.API)
+  list(page = 0, size = 10) {
+    return this.http.get<ICoursePage>(this.API, { params: { page, size }})
     .pipe(
       first()
     );

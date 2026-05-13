@@ -6,10 +6,20 @@
     <mat-card-content>
         @if (courses$ | async; as courses) {
             <app-courses-list
-                [courses]="courses"
+                [courses]="courses.courses"
                 (editEvent)="onEdit($event)"
                 (deleteEvent)="onDelete($event)"
             ></app-courses-list>
+
+            <mat-paginator
+                [length]="courses.totalElements"
+                [pageSize]="pageSize"
+                [pageIndex]="pageIndex"
+                [pageSizeOptions]="[5, 10, 15]"
+                (page)="refresh($event)"
+                aria-label="Selecione o número de itens por página"
+                showFirstLastButtons
+            ></mat-paginator>
         } @else {
             <div class="loading-container">
                 <mat-spinner></mat-spinner>
